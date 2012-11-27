@@ -1,0 +1,29 @@
+{
+  "routes":
+  [
+    { "path": "/", "callback": "application#index" },
+
+    { "path": "/login", "method": "POST", "callback": "session#login" },
+    { "path": "/login", "method": "GET", "callback": "application#login" },
+    { "path": "/logout", "method": "get", "callback": "session#logout" },
+    { "path": "/signin", "method": "POST", "callback": "session#login" },
+    { "path": "/signin", "method": "GET", "callback": "application#login" },
+    { "path": "/signout", "method": "get", "callback": "session#logout" },
+    { "path": "/signup", "method": "get", "callback": "application#signup" },
+    { "path": "/signup", "method": "post", "callback": "user#signup" },
+
+    { "path": "/photos/create", "method": "post", "callback": "photos#_create" },
+    { "path": "/photos/create.json", "method": "post", "callback": "photos#_create_json" },
+    { "path": "/photos/:id/delete", "method": "get", "callback": "photos#_destroy" },
+
+    { "path": "*", "method": "get", "callback": "application#page_not_found" }
+  ],
+  "filters":
+  [
+    { "path": "/", "callback": "session_filter#checkUserSession" }
+  ],
+  "websockets":
+  [
+  	{ "event": "", "callback": ""}
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "name": "pixgrid",
+  "version": "0.1.0",
+  "description": "Photo uploader",
+  "framework": "mvc",
+  "main": "app.js",
+  "logfile" : "pixgrid.log",
+  "keywords": [
+  ],
+  "author": "ACS",
+  "maintainers": [
+  ],
+  "contributors": [
+  ],
+  "repository": {
+    "type": "git",
+    "url": ""
+  },
+  "preferGlobal": false,
+  "dependencies": {
+    "express-partials": "*"
+  },
+  "license":"",
+  "private": true
+}

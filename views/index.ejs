@@ -1,0 +1,317 @@
+<script type="text/javascript">
+var pixGrid = {
+  data: {}
+};
+$(function(){
+  $(".pht").click(function(){
+    $(this).attr('id','current');
+    var iurl = $(this).attr('data-url');
+    if($("#p-img img").length < 1){
+      $("#v #p-img").append("<img id='pimg' src='"+iurl+"' />");
+      $('#pimg').load(function(){
+        if($(this).height() < $("#v #p-img").height()) {
+          var h = ($("#v #p-img").height() - $(this).height())/2;
+          $(this).css('padding-top',h);
+        }
+      });
+      $("#v, #shdw").show();
+    }
+  });
+  $("#v .cls").click(function(){
+    $("#current").attr('id','');
+    $("#v #p-img img").remove();
+    $("#v, #shdw").hide();
+  });
+  $("#v #next").click(function(){
+    var next = $("#current").nextAll(".pht");
+    if(next.length === 0){
+      next = $(".pht").first()
+    }
+    var iurl = next.attr('data-url');
+    if($("#p-img img").length > 0){
+      $("#pimg").attr('src',iurl);
+      $('#pimg').load(function(){
+        if($(this).height() < $("#v #p-img").height()) {
+          var h = ($("#v #p-img").height() - $(this).height())/2;
+          $(this).css('padding-top',h);
+        }
+        $("#current").attr('id','');
+        next.attr('id','current');
+      });
+      $("#v, #shdw").show();
+    }
+  });
+  $("#v #prev").click(function(){
+    var prev = $("#current").prev();
+    if(prev.length === 0){
+      prev = $(".pht").last();
+    }
+    var iurl = prev.attr('data-url');
+    if($("#p-img img").length > 0){
+      $("#pimg").attr('src',iurl);
+      $('#pimg').load(function(){
+        if($(this).height() < $("#v #p-img").height()) {
+          var h = ($("#v #p-img").height() - $(this).height())/2;
+          $(this).css('padding-top',h);
+        }
+        $("#current").attr('id','');
+        prev.attr('id','current');
+      });
+      $("#v, #shdw").show();
+    }
+  });
+  $("#preview .cls").click(function(){
+    jQuery("#pv-img").attr('src','');
+    $("#preview, #shdw").hide();
+  });
+});
+</script>
+<script type="text/javascript">
+  function dragEnter(event) {
+    event.stopPropagation();
+    event.preventDefault();
+  }
+
+  function dragExit(event) {
+    event.stopPropagation();
+    event.preventDefault();
+  }
+
+  function dragOver(event) {
+    event.stopPropagation();
+    event.preventDefault();
+  }
+
+  function drop(event) {
+    if(!!window.FileReader && Modernizr.draganddrop){
+      event.stopPropagation();
+      event.preventDefault();
+      
+      var data = event.dataTransfer;
+      var files = data.files;
+      var reader;
+      
+      for(var i = 0; i < files.length; i++) {
+        jQuery("#preview, #shdw").show();
+        pixGrid.data.file = files[i];
+        reader = new FileReader();
+        reader.onloadend = onFileLoaded;
+        reader.readAsDataURL(pixGrid.data.file);
+        break;
+      }
+    }else{
+      // safari
+    }
+  }
+
+  function onFileLoaded(event) {
+    var pimg = document.getElementById("pv-img");
+    pimg.src = event.currentTarget.result;
+    pixGrid.data.src = event.currentTarget.result;
+    jQuery("#pv-img").load(function(){
+      $(".fn").text(pixGrid.data.file.name + " (" + parseInt(Math.ceil(pixGrid.data.file.size/1000)) + "k)")
+      if(jQuery(this).height() > $("#pv").height()) {
+        $(this).css({"height":$("#pv").height()});
+      }else{
+        var h = ($("#pv").height() - $(this).height())/2;
+        $(this).css('padding-top',h);
+      }
+    });
+  }
+
+  $(function(){
+    if(!!window.FileReader && Modernizr.draganddrop){
+      var dropArea = $("body").get(0);
+      dropArea.addEventListener("dragenter", dragEnter, false);
+      dropArea.addEventListener("dragexit", dragExit, false);
+      dropArea.addEventListener("dragover", dragOver, false);
+      dropArea.addEventListener("drop", drop, false);
+    }else{
+      $("#dropArea h3").html("<span style='color:#1189fe;margin:10px;'></span><form action='/photos/create' method='post' enctype='multipart/form-data' style='display:inline;'><input type='file' name='photo' /><input type='submit' value='Submit' /></form>");
+
+    }
+    $("#fi").change(function (){
+      var fileName = $(this).val();
+      $(".filename").html(fileName);
+    });
+
+    $("#proceed").click(function proceed(){
+      $("#proceed").replaceWith("<div id='uploading' class='fr'><span class='blue'>uploading...</span><div class='img'></div></div>");
+      var xmlHttpRequest = new XMLHttpRequest();
+      xmlHttpRequest.open("POST", '/photos/create.json', true);
+      var dashes = '--';
+      var boundary = '---pixgrid---';
+      var crlf = "\r\n";
+
+      //Post with the correct MIME type (If the OS can identify one)
+      if ( pixGrid.data.file.type === '' ){
+        filetype = 'application/octet-stream';
+      }else{
+        filetype = pixGrid.data.file.type;
+      }
+
+      //Build a HTTP request to post the file
+      var data = dashes + boundary + crlf + "Content-Disposition: form-data;" + "name=\"photo\";" + "filename=\"" + unescape(encodeURIComponent(pixGrid.data.file.name)) + "\"" + crlf + "Content-Type: " + filetype + crlf + crlf + pixGrid.data.src + crlf + dashes + boundary + dashes;
+
+      xmlHttpRequest.setRequestHeader("Accept","text/html,application/xhtml+xml,application/xml;q=0.9,*/*;q=0.8");
+      xmlHttpRequest.setRequestHeader("Content-Type", "multipart/form-data; boundary=" + boundary);
+      xmlHttpRequest.setRequestHeader("Cache-Control","max-age=0");
+
+      xmlHttpRequest.onreadystatechange = function(){ 
+        if(xmlHttpRequest.readyState === 4){
+          if(xmlHttpRequest.status === 200){
+            var result = JSON.parse(xmlHttpRequest.responseText);
+            if(result.meta && result.meta.code === 200){
+              $("#uploading").replaceWith("<div id='success' class='fr'><span class='green'>Success</span><div class='img'></div></div>");
+              if($(".pht").length > 0){
+                $(".pht").first().before('<div class="pht" data-id="'+result.photos[0].id+'"><span>Uploading the photo. Please refresh the page to view the photo.</span></div>');
+                $("#p-count").text( parseInt($("#p-count").text()) + 1 );
+              }else{
+                $("#dropArea").after('<div class="sb last"><h2>All Photos <span class="cts">(<span id="p-count">1</span> photos)</span></h2><div id="p-ctnr"><div class="pht" data-id="'+result.photos[0].id+'"><span>Uploading the photo. Please refresh the page to view the photo.</span></div><div class="clr"></div></div></div>');
+              }
+              if($("#flash").length > 0){
+                $("#flash").show().text("Successfully uploaded the photo.");
+              }else{
+                $("body").append("<div id='flash'>Successfully uploaded the photo.</div>")
+              }
+              setTimeout(function(){
+                $("#preview, #shdw").fadeOut('slow');
+                $("#success").replaceWith('<span id="proceed" class="btn">Proceed</span>');
+                $("#proceed").click(proceed);
+              },1000);
+              setTimeout(function(){$("#flash").fadeOut()},3000);
+            }else{
+              if($("#flash").length > 0){
+                $("#flash").show().text(result.message);
+              }else{
+                $("body").append("<div id='flash'>"+result.message+"</div>")
+              }
+              setTimeout(function(){$("#flash").fadeOut()},3000);
+            }
+          }else{
+            if($("#flash").length > 0){
+              $("#flash").show().text("Fail to upload the photo.");
+            }else{
+              $("body").append("<div id='flash'>Fail to upload the photo.</div>")
+            }
+            setTimeout(function(){$("#flash").fadeOut()},3000);
+          }
+          $("#uploading").replaceWith('<span id="proceed" class="btn">Proceed</span>');
+          $("#proceed").click(proceed);
+        }
+      }; 
+      //Send the binary data
+      xmlHttpRequest.send(data);
+    });
+
+    $("#trash").click(function(){
+      var trash_target = $("#current");
+      jQuery.ajax({
+        type: 'GET',
+        url: "/photos/"+trash_target.attr('data-id')+"/delete",
+        dataType: 'html',
+        success: function(data, status, xml){
+          $("#current").remove();
+          $("#v, #shdw").hide();
+          if($("#flash").length > 0){
+            $("#flash").show().text("Successfully deleted.");
+          }else{
+            $("body").append("<div id='flash'>Successfully deleted.</div>")
+          }
+          $("#p-count").text( parseInt($("#p-count").text()) - 1 );
+          $("#v #p-img img").remove();
+          setTimeout(function(){$("#flash").fadeOut()},3000);
+        },
+        error: function(xml, status, error){
+          if($("#flash").length > 0){
+            $("#flash").show().text("Fail to delete the photo.");
+          }else{
+            $("body").append("<div id='flash'>Fail to delete the photo.</div>")
+          }
+          setTimeout(function(){$("#flash").fadeOut()},3000);
+        }
+      });
+    });
+
+    $("#select-p").click(function(){
+      $("#photo-file").click();
+    });
+
+    $('#photo-file').change(function(e){
+      e.stopPropagation();
+      e.preventDefault();
+      if(!!window.FileReader && Modernizr.draganddrop){
+        var files = e.target.files;
+        var reader;
+        
+        for(var i = 0; i < files.length; i++) {
+          jQuery("#preview, #shdw").show();
+          pixGrid.data.file = files[i];
+          reader = new FileReader();
+          reader.onloadend = onFileLoaded;
+          reader.readAsDataURL(pixGrid.data.file);
+          break;
+        }
+      }else{
+        // safari
+      }
+    });
+  });
+</script>
+<div id="dropArea">
+  <h3>+ Drag and Drop photos anywhere, to add <span style="color:#1189fe;margin:10px;">or</span> <span id="select-p" class="b-btn">Choose photos to upload</span></h3>
+  <input type="file" name="image" id="photo-file" />
+</div>
+<!-- <div class="sb first">
+  <div id="albm-ctnr">
+    <div class="albm"><div class="cp"></div></div>
+    <div class="albm"><div class="cp"></div></div>
+    <div class="albm"><div class="cp"></div></div>
+    <div class="clr"></div>
+  </div>
+</div> -->
+<% var o = obj["photos"] %>
+<% if(o.length > 0) { %>
+  <div class="sb last">
+    <h2>All Photos <span class="cts">(<span id="p-count"><%= obj.meta.total_results %></span> photos)</span></h2>
+    <div id="p-ctnr">
+      <% for(var i=0;i<o.length;i++){ %>
+        <% for (var j in o[i].urls) { %>
+          <div class="pht" data-url="<%= o[i].urls.medium_500 %>" data-id="<%= o[i].id %>"><img src="<%= o[i].urls.medium_500 %>" alt="<%= o[i].id %>" height="210" width="210" data-id="<%= o[i].id %>"/></div>
+        <%
+          break;
+        } %>
+      <% } %>
+      <div class="clr"></div>
+    </div>
+  </div>
+<% } %>
+<div id="v">
+  <div id="p-nav">
+    <div id="prev" unselectable="on">prev</div>
+    <div class="cls" unselectable="on">x</div>
+    <div id="next" unselectable="on">next</div>
+  </div>
+  <div id="p-img"></div>
+  <div id="trash" unselectable="on">trash</div>
+</div>
+<div id="shdw"></div>
+
+<div id="preview">
+  <div class="cls" unselectable="on">x</div>
+  <div class="ctnr">
+    <div id="pv" class="fl">
+      <img src="" id="pv-img" />
+    </div>
+    <!-- <div id="inputs" class="fl">
+      <textarea id="i-desc" name="description" placeholder="Description" rows="4"></textarea>
+      <input id="i-tags" type="text" name="tags" placeholder="Tags" />
+    </div> -->
+    <div class="clr"></div>
+    <div id="btm">
+      <span class="fn fl">filename (size)</span>
+      <div class="fr"><span id="proceed" class="btn">Proceed</span></div>
+      <div class="clr"></div>
+    </div>
+  </div>
+</div>

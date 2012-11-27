@@ -1,0 +1,58 @@
+<script type="text/javascript">
+$(function(){
+  $("input[name='un']").focus();
+  $("#l-s").click(function(){
+    $("#su-sec").hide();
+    $("#l-sec").fadeIn();
+  });
+  $("#su-s").click(function(){
+    $("#l-sec").hide();
+    $("#su-sec").fadeIn();
+  });
+  <% if(req.session.controller === "signup"){ %>
+    $("#l-sec").hide();
+    $("#su-sec").show();
+  <% } %>
+});
+</script>
+<style type="text/css">
+#l-sec{}
+#su-sec{display:none;}
+</style>
+<section id="l-sec">
+  <div class="sb first">
+    <div id="logo">PixGrid</div>
+  </div>
+  <div class="sb">
+    <div id="login">
+      <form name="login" action="/login" method="post">
+        <input type="text" name="un" placeholder="Email" />
+        <input type="password" name="pw" placeholder="&bull;&bull;&bull;&bull;&bull;&bull;&bull;&bull;" />
+        <input type="submit" value="Login" class="b-btn m-a">
+        <a href="/forgot" class="forgot">Forgot username or password?</a>
+      </form>
+    </div>
+  </div>
+  <div class="sb last">
+    <a href="#" id="su-s" class="g-btn m-a siu">Sign up</a>
+  </div>
+</section>
+
+<section id="su-sec">
+  <div class="sb first">
+    <div id="logo">PixGrid</div>
+  </div>
+  <div class="sb">
+    <div id="signup">
+      <form name="signup" action="/signup" method="post">
+        <input type="text" name="email" placeholder="Email" />
+        <input type="text" name="first_name" placeholder="First Name" />
+        <input type="text" name="last_name" placeholder="Last Name" />
+        <input type="password" name="pw" placeholder="Password" />
+        <input type="password" name="pw_c" placeholder="Password Confirmation" />
+        <input type="submit" value="Sign Up" class="b-btn m-a">
+        <a href="#" id="l-s" class="forgot">Have an Account?</a>
+      </form>
+    </div>
+  </div>
+</section>
