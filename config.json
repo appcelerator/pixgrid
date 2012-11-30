@@ -1,7 +1,7 @@
 {
   "routes":
   [
-    { "path": "/", "callback": "application#index" },
+    { "path": "/", "method": "GET", "callback": "application#index" },
 
     { "path": "/login", "method": "POST", "callback": "session#login" },
     { "path": "/login", "method": "GET", "callback": "application#login" },
