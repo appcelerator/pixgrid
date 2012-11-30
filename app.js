@@ -20,16 +20,6 @@ function start(app) {
 
   //Request body parsing middleware supporting JSON, urlencoded, and multipart
   app.use(express.bodyParser());
-
-  //error handling, finish this!
-  app.use(function(err, req, res, next){
-    logger.error(err.stack);
-    res.render("error", {
-      layout: 'error',
-      req: req,
-      errors: err.stack
-    });
-  });
 }
 
 // release resources
