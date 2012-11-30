@@ -47,7 +47,7 @@ footer{height:50px;padding:40px 0;width:100%;}
 }
 #tnav .tnr #un{width:115px;border:1px solid #555;-webkit-border-radius:3px;-moz-border-radius:3px;border-radius:3px;color:#555;font:700 12px/24px 'Helvetica neue',arial,sans-serif;}
 #tnav .tnr #un img{margin:0 0 0 5px;}
-#tnav .tnr #un #signout{display:block;width:100%;color:#1189fe;font:400 11px/20px 'Helvetica Neue',arial,sans-serif;text-decoration:none;text-align:center;}
+#tnav .tnr #un #logout{display:block;width:100%;color:#1189fe;font:400 11px/20px 'Helvetica Neue',arial,sans-serif;text-decoration:none;text-align:center;}
 #tnav .tnr #un #ud{display:none;}
 #tnav .tnr #un:hover #ud{display:block;}
 #tnav .tnl{position:absolute;top:8px;left:0;}

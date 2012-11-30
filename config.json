@@ -1,14 +1,11 @@
 {
   "routes":
   [
-    { "path": "/", "callback": "application#index" },
+    { "path": "/", "method": "GET", "callback": "application#index" },
 
     { "path": "/login", "method": "POST", "callback": "session#login" },
     { "path": "/login", "method": "GET", "callback": "application#login" },
     { "path": "/logout", "method": "get", "callback": "session#logout" },
-    { "path": "/signin", "method": "POST", "callback": "session#login" },
-    { "path": "/signin", "method": "GET", "callback": "application#login" },
-    { "path": "/signout", "method": "get", "callback": "session#logout" },
     { "path": "/signup", "method": "get", "callback": "application#signup" },
     { "path": "/signup", "method": "post", "callback": "user#signup" },
 
