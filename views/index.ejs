@@ -112,6 +112,11 @@ $(function(){
       $(".fn").text(pixGrid.data.file.name + " (" + parseInt(Math.ceil(pixGrid.data.file.size/1000)) + "k)")
       if(jQuery(this).height() > $("#pv").height()) {
         $(this).css({"height":$("#pv").height()});
+        if(jQuery(this).width() > $("#pv").width()) {
+          $(this).css({"width":$("#pv").width()});
+        }
+      }else if(jQuery(this).width() > $("#pv").width()) {
+        $(this).css({"width":$("#pv").width()});
       }else{
         var h = ($("#pv").height() - $(this).height())/2;
         $(this).css('padding-top',h);
