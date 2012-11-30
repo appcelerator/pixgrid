@@ -102,7 +102,7 @@ h2{font:700 24px/30px "helvetica neue",arial,sans-serif;color:#858585;text-shado
 
 #preview{display:none;position:fixed;top:10%;left:50%;width:475px;height:336px;margin:0 0 0 -237px;z-index:31;}
 #preview .ctnr{background:#fff;-webkit-border-radius:3px;-moz-border-radius:3px;border-radius:3px;margin:8px 0 0 0;}
-#preview .ctnr #pv{width:440px;height:240px;background:#484850;margin:18px;}
+#preview .ctnr #pv{width:440px;height:240px;background:#484850;margin:18px;overflow:hidden;}
 #preview .ctnr #pv #pv-img{display:block;margin:auto;}
 #preview .ctnr #inputs{width:200px;margin:18px 18px 18px 0px;}
 #preview .ctnr #inputs textarea{width:100%;height:180px;font:18px/24px 'Helvetica Neue',arial,sans-serif;padding:5px;margin:0;-webkit-border-radius:5px;-moz-border-radius:5px;border-radius:5px;outline:none;border:1px solid #909090;}
