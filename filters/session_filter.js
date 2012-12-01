@@ -29,6 +29,7 @@ function checkUserSession(req, res, next) {
           layout: 'application',
           req: req
         });
+        return;
       }
       next();
     }, req, res);
