@@ -167,13 +167,28 @@ $(function(){
           if(xmlHttpRequest.status === 200){
             var result = JSON.parse(xmlHttpRequest.responseText);
             if(result.meta && result.meta.code === 200){
-              $("#uploading").replaceWith("<div id='success' class='fr'><span class='green'>Success</span><div class='img'></div></div>");
+              $('#uploading').replaceWith('<div id="success" class="fr"><span class="green">Success</span><div class="img"></div></div>');
               if($(".pht").length > 0){
-                $(".pht").first().before('<div class="pht" data-id="'+result.photos[0].id+'"><span>Uploading the photo. Please refresh the page to view the photo.</span></div>');
+                $(".pht").first().before('<div id="new-pht" class="pht" data-url="'+result.photos[0].urls.medium_500+'" data-id="'+result.photos[0].id+'"><img src="'+result.photos[0].urls.medium_500+'" alt="'+result.photos[0].id+'" height="210" width="210" data-id="'+result.photos[0].id+'"/></div>');
                 $("#p-count").text( parseInt($("#p-count").text()) + 1 );
               }else{
-                $("#dropArea").after('<div class="sb last"><h2>All Photos <span class="cts">(<span id="p-count">1</span> photos)</span></h2><div id="p-ctnr"><div class="pht" data-id="'+result.photos[0].id+'"><span>Uploading the photo. Please refresh the page to view the photo.</span></div><div class="clr"></div></div></div>');
+                $("#dropArea").after('<div class="sb last"><h2>All Photos <span class="cts">(<span id="p-count">1</span> photos)</span></h2><div id="p-ctnr"><div id="new-pht" class="pht" data-url="'+result.photos[0].urls.medium_500+'" data-id="'+result.photos[0].id+'"><img src="'+result.photos[0].urls.medium_500+'" alt="'+result.photos[0].id+'" height="210" width="210" data-id="'+result.photos[0].id+'"/>/div><div class="clr"></div></div></div>');
               }
+              $("#new-pht").click(function(){
+                $(this).attr('id','current');
+                var iurl = $(this).attr('data-url');
+                if($("#p-img img").length < 1){
+                  $("#v #p-img").append("<img id='pimg' src='"+iurl+"' />");
+                  $('#pimg').load(function(){
+                    if($(this).height() < $("#v #p-img").height()) {
+                      var h = ($("#v #p-img").height() - $(this).height())/2;
+                      $(this).css('padding-top',h);
+                    }
+                  });
+                  $("#v, #shdw").show();
+                }
+              });
+              $("#new-pht").attr('id','');
               if($("#flash").length > 0){
                 $("#flash").show().text("Successfully uploaded the photo.");
               }else{
