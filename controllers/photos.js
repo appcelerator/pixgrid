@@ -7,6 +7,7 @@ function _create(req, res) {
   var data = {
     photo: req.files.photo
   };
+  data['photo_sizes[medium_500]'] = '500x333';
   data['photo_sync_sizes[]'] = 'medium_500';
   ACS.Photos.create(data, function(e) {
     if(e.success && e.success === true){
@@ -36,6 +37,7 @@ function _create_json(req, res) {
         collection_id: req.body.collection_id,
         tags: req.body.tags
       };
+      data['photo_sizes[medium_500]'] = '500x333';
       data['photo_sync_sizes[]'] = 'medium_500';
       ACS.Photos.create(data, function(e) {
         fs.unlink(tmp_base64, function (err) {
