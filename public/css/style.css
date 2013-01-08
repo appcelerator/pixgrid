@@ -11,6 +11,7 @@ footer{height:50px;padding:40px 0;width:100%;}
 .fl{float:left;}
 .ib{display:inline-block!important;}
 .clr{clear:both;}
+:-moz-placeholder{color:#ccc;}
 
 #flash{position:absolute;top:3px;right:50%;margin:0 -155px 0 0;width:300px;background:#333;color:#fff;text-align:center;padding:5px;-webkit-border-radius:5px;-moz-border-radius:5px;border-radius:5px;opacity:0.9;z-index:300;}
 
