@@ -1,11 +1,11 @@
-var ACS = require('acs').ACS,
+var ACS = require('acs-node'),
     logger = require('acs').logger,
     express = require('express'),
     partials = require('express-partials');
 
 // initialize app (setup ACS library and logger)
 function start(app) {
-  ACS.init('OAUTH_KEY', 'OAUTH_SECRET_KEY');
+  ACS.init('OAUTH_KEY', 'OAUTH_SECRET_KEY', 'API_ENTRY_POINT(optional)');
   logger.setLevel('DEBUG');
   
   //use connect.session

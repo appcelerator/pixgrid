@@ -1,4 +1,4 @@
-var ACS = require('acs').ACS,
+var ACS = require('acs-node'),
     logger = require('acs').logger,
     fs = require('fs');
 

@@ -1,4 +1,4 @@
-var ACS = require('acs').ACS,
+var ACS = require('acs-node'),
     logger = require('acs').logger
 
 function signup(req, res) {
